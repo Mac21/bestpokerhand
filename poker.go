@@ -70,11 +70,11 @@ func NewDeckFromString(input string) *Deck {
 func (d Deck) String() string {
 	s := ""
 	for i, c := range d {
-        if i == d.Len() - 1 {
-            s += c.String()
-        } else {
-            s += c.String() + ", "
-        }
+		if i == d.Len()-1 {
+			s += c.String()
+		} else {
+			s += c.String() + ", "
+		}
 	}
 	return s
 }
@@ -158,20 +158,32 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 		groups[c.Score()] = append(groups[c.Score()], c)
 	}
 
-	handScore := hand[0].Score() + hand[1].Score()
+	card1 := hand[0]
+	card2 := hand[1]
+	handScore := max(card1.Score(), card2.Score())
 	flush := d.IsFlush(hand)
 	straight := d.IsStraight(hand)
 
 	switch len(groups) {
 	case 4:
+		numPairs := 0
 		for _, group := range groups {
 			if len(group) == 4 {
 				// quads
 				return 8 * handScore
 			}
+
+			if len(group) == 2 {
+				numPairs++
+			}
 		}
-		// full house
-		return 7 * handScore
+
+		// If the board has paired itself and the player has two pair then it's not a full house
+		if numPairs < 3 {
+			// full house
+			return 7 * handScore
+		}
+		fallthrough
 	default:
 		switch {
 		case flush && straight:
@@ -181,24 +193,31 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 		case straight:
 			return 5 * handScore
 		default:
-			switch len(groups) {
-			case 5, 6:
-				totalScore := 0
-				for score, group := range groups {
-					if len(group) == 3 {
-						// trips
-						totalScore += 4 * score
-					}
+			card1Group := groups[card1.Score()]
+			g1len := card1Group.Len()
+			card2Group := groups[card2.Score()]
+			g2len := card2Group.Len()
 
-					// Total each pair
-					if len(group) == 2 {
-						totalScore += 2 * score
-					}
-				}
-				return totalScore + handScore
-			default:
-				return handScore
+			// Trips
+			if g1len == 3 || g2len == 3 {
+				return 4 * handScore
 			}
+
+			// Two pair
+			if g1len == 2 && g2len == 2 {
+				return 3 * (card1.Score() + card2.Score())
+			} else if g1len == 2 {
+				return 2 * card1.Score()
+			} else if g2len == 2 {
+				return 2 * card2.Score()
+			}
+
+			// Ace high card
+			if handScore == 13 {
+				return 0
+			}
+			// High card
+			return -handScore
 		}
 	}
 }
