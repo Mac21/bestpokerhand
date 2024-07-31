@@ -69,8 +69,12 @@ func NewDeckFromString(input string) *Deck {
 
 func (d Deck) String() string {
 	s := ""
-	for _, c := range d {
-		s += c.String() + ","
+	for i, c := range d {
+        if i == d.Len() - 1 {
+            s += c.String()
+        } else {
+            s += c.String() + ", "
+        }
 	}
 	return s
 }
