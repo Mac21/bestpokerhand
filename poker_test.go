@@ -165,3 +165,11 @@ func TestAceHighBeatsHighcard(t *testing.T) {
     losing := deck
 	validateHandStrength(board, winning, losing,  t)
 }
+
+func TestFlushBeatsPair(t *testing.T) {
+    deck := buildBoardAndHand("8s2s7sks4s8caskd9h")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
