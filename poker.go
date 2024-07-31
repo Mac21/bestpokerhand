@@ -69,12 +69,8 @@ func NewDeckFromString(input string) *Deck {
 
 func (d Deck) String() string {
 	s := ""
-	for i, c := range d {
-		if i == d.Len()-1 {
-			s += c.String()
-		} else {
-			s += c.String() + ", "
-		}
+	for _, c := range d {
+		s += c.String()
 	}
 	return s
 }
@@ -136,16 +132,21 @@ func (d Deck) IsStraight(hand Deck) bool {
 }
 
 func (d Deck) IsFlush(hand Deck) bool {
-	numSuitsMatched := 0
-	for i := 0; i < d.Len(); i++ {
-		if d[i].suit == hand[0].suit {
-			numSuitsMatched++
-		}
-		if d[i].suit == hand[1].suit {
-			numSuitsMatched++
+	var cards Deck
+	cards = append(cards, d...)
+	cards = append(cards, hand...)
+
+	flushgroups := make(map[byte]Deck)
+	for _, c := range cards {
+		flushgroups[c.suit] = append(flushgroups[c.suit], c)
+	}
+
+	for _, groups := range flushgroups {
+		if groups.Len() > 4 {
+			return true
 		}
 	}
-	return numSuitsMatched > 5
+	return false
 }
 
 func (d Deck) AnalyzeHand(hand Deck) int {
