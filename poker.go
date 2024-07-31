@@ -215,12 +215,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 				return 2 * card2.Score()
 			}
 
-			// Ace high card
-			if handScore == 13 {
-				return 0
-			}
-			// High card
-			return -handScore
+			return handScore - 13
 		}
 	}
 }
