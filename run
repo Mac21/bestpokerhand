@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BUILD_OUTPUT="$(go build -o app .)"
+
+if [[ "$?" -ne "" ]]; then
+  echo $BUILD_OUTPUT
+  exit 1
+fi
+
+if [[ ! -f "app" ]]; then
+  echo "Error: random-ivr-label executable missing"
+  exit 1
+else
+    env $(cat secrets) ./app
+fi

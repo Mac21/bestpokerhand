@@ -1,0 +1,60 @@
+{{ define "content" }}
+    <script type="text/javascript">
+        $(document).ready(() => {
+            $("#hand1submit").click((e) => {
+                $("#chosenscore").prop("value", "hand1");
+            });
+
+            $("#hand2submit").click((e) => {
+                $("#chosenscore").prop("value", "hand2");
+            });
+        });
+    </script>
+    <div class="card">
+        <div class="card-header">
+            Best Poker Hand
+            <a href="/" class="float-end btn btn-success">New Game</a>
+        </div>
+        <div class="card-body">
+            <form action="/current" method="post">
+                <input type="text" id="chosenscore" name="chosenscore" hidden value="none">
+                <input type="number" id="hand1score" name="hand1score" hidden value="{{ .hand1.score }}">
+                <input type="number" id="hand2score" name="hand2score" hidden value="{{ .hand2.score }}">
+                <div class="row">
+                    <h1>Score: <span id="score">{{ .overallScore }}</span></h1>
+                </div>
+                <div class="row">
+                    <div class="col-4"></div>
+                    <div class="col-4">
+                        <h1>
+                            {{ range .board }}
+                                <span style="color: {{ .Color }}">{{ .UnicodeString }}</span>
+                            {{ end }}
+                        </h1>
+                    </div>
+                    <div class="col-4"></div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <button id="hand1submit" class="btn">
+                            <h2>
+                                {{ range .hand1.cards }}
+                                    <span style="color: {{ .Color }}">{{ .UnicodeString }}</span>
+                                {{ end }}
+                            </h2>
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button id="hand2submit" class="btn">
+                            <h2>
+                                {{ range .hand2.cards }}
+                                    <span style="color: {{ .Color }}">{{ .UnicodeString }}</span>
+                                {{ end }}
+                            </h2>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{{ end }}
