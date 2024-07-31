@@ -173,3 +173,11 @@ func TestFlushBeatsPair(t *testing.T) {
     losing := deck
 	validateHandStrength(board, winning, losing,  t)
 }
+
+func TestFlushBeatsPocketPair(t *testing.T) {
+    deck := buildBoardAndHand("2h8cjc4h3cqckcasah")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}

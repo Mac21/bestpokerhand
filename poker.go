@@ -3,6 +3,7 @@ package main
 import (
 	"cmp"
 	"crypto/rand"
+	"fmt"
 	"math/big"
 	"slices"
 	"strings"
@@ -165,6 +166,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 	flush := d.IsFlush(hand)
 	straight := d.IsStraight(hand)
 
+    fmt.Println(hand, flush, straight, len(groups), groups)
 	switch len(groups) {
 	case 4:
 		numPairs := 0
@@ -205,7 +207,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 			}
 
 			// Two pair
-			if g1len == 2 && g2len == 2 {
+			if g1len == 2 && g2len == 2 && card1.Score() != card2.Score() {
 				return 3 * (card1.Score() + card2.Score())
 			} else if g1len == 2 {
 				return 2 * card1.Score()
