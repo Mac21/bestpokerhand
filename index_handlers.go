@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,24 +33,26 @@ func indexTemplateHandler(c *gin.Context) {
 
 func runningGameHandler(c *gin.Context) {
 	pickedScore, _ := c.GetPostForm("chosenscore")
-	hand1score, _ := c.GetPostForm("hand1score")
-	hand2score, _ := c.GetPostForm("hand2score")
+	hand1scorestr, _ := c.GetPostForm("hand1score")
+	hand2scorestr, _ := c.GetPostForm("hand2score")
 	boardstr, _ := c.GetPostForm("board")
 	hand1str, _ := c.GetPostForm("hand1")
 	hand2str, _ := c.GetPostForm("hand2")
 
+    hand1score, _ := strconv.Atoi(hand1scorestr)
+    hand2score, _ := strconv.Atoi(hand2scorestr)
     fmt.Printf("Board: %s\n", boardstr)
     fmt.Printf("\tHand1: %s\n", hand1str)
     fmt.Printf("\tHand2: %s\n", hand2str)
-    fmt.Printf("\tpicked score: %s, hand1score: %s, hand2score: %s, overallscore: %s\n", pickedScore, hand1score, hand2score, overallScore)
+    fmt.Printf("\tpicked score: %s, hand1score: %d, hand2score: %d, overallscore: %d\n", pickedScore, hand1score, hand2score, overallScore)
 
 	switch pickedScore {
 	case "hand1":
-		if hand1score > hand2score {
+		if hand1score >= hand2score {
 			overallScore++
 		}
 	case "hand2":
-		if hand2score > hand1score {
+		if hand2score >= hand1score {
 			overallScore++
 		}
 	}
