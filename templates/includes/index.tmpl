@@ -2,7 +2,7 @@
     <script type="text/javascript">
         $(document).ready(() => {
             $("#hand1submit").click((e) => {
-                $("#chosenscore").prop("value", "hand1");
+                $("#chosenscore").prop("hand1");
             });
 
             $("#hand2submit").click((e) => {
@@ -18,6 +18,9 @@
         <div class="card-body">
             <form action="/current" method="post">
                 <input type="text" id="chosenscore" name="chosenscore" hidden value="none">
+                <input type="text" id="board" name="board" hidden value="{{ .board }}">
+                <input type="text" id="hand1" name="hand1" hidden value="{{ .hand1.cards }}">
+                <input type="text" id="hand2" name="hand2" hidden value="{{ .hand2.cards }}">
                 <input type="number" id="hand1score" name="hand1score" hidden value="{{ .hand1.score }}">
                 <input type="number" id="hand2score" name="hand2score" hidden value="{{ .hand2.score }}">
                 <div class="row">
