@@ -239,7 +239,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 			}
 
 			// Two pair
-			if g1len == 2 && g2len == 2 && card1.Score() != card2.Score() {
+			if g1len == 2 && g2len == 2 {
 				return (3 * 3) + handScore
 			} else if g1len == 2 {
 				return (2 * 2) + card1.Score()
