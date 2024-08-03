@@ -8,10 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var overallScore = 0
+var (
+    overallScore = 0
+    totalHands = 1
+)
 
 func indexTemplateHandler(c *gin.Context) {
 	overallScore = 0
+    totalHands = 0
 	deck := NewDeck()
 	deck.Shuffle()
 	board := deck.DealCards(5)
@@ -19,6 +23,7 @@ func indexTemplateHandler(c *gin.Context) {
 	hand2 := deck.DealCards(2)
 	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
 		"overallScore": overallScore,
+        "totalHands": totalHands,
 		"board":        board,
 		"hand1": gin.H{
 			"cards": hand1,
@@ -56,6 +61,7 @@ func runningGameHandler(c *gin.Context) {
 			overallScore++
 		}
 	}
+    totalHands++
 
 	deck := NewDeck()
 	deck.Shuffle()
@@ -64,6 +70,7 @@ func runningGameHandler(c *gin.Context) {
 	hand2 := deck.DealCards(2)
 	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
 		"overallScore": overallScore,
+        "totalHands": totalHands,
 		"board":        board,
 		"hand1": gin.H{
 			"cards": hand1,
