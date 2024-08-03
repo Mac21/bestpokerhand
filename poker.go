@@ -3,7 +3,6 @@ package main
 import (
 	"cmp"
 	"crypto/rand"
-	"fmt"
 	"math/big"
 	"slices"
 	"strings"
@@ -110,7 +109,7 @@ func aceHighSort(a, b *Card) int {
 }
 
 func aceLowSort(a, b *Card) int {
-	return (a.Score() % 13) - (b.Score() % 13)
+	return (a.Score() % 14) - (b.Score() % 14)
 }
 
 func isStraight(hand Deck) (bool, int) {
@@ -119,14 +118,18 @@ func isStraight(hand Deck) (bool, int) {
 		return false, -1
 	}
 
-	runningCount := hand[0].Score() % 13
+	runningCount := hand[0].Score() % 14
 	for i := 0; i < n; i++ {
 		c := hand[i]
-		if (runningCount % 13) != (c.Score() % 13) {
-            fmt.Println(c, runningCount, c.Score())
-            return false, runningCount
+		if (runningCount % 14) != (c.Score() % 14) {
+			return false, runningCount
 		}
-        runningCount++
+
+		if c.Score() == 14 {
+			runningCount += 2
+		} else {
+			runningCount++
+		}
 	}
 
 	return true, runningCount
@@ -144,19 +147,19 @@ func (d Deck) IsStraight(hand Deck) (bool, int) {
 	aceLow := slices.Clone(aceHigh)
 	slices.SortFunc(aceLow, aceLowSort)
 
-    if isOutsideStraight, score := isStraight(aceHigh[1:]); isOutsideStraight {
-        return isOutsideStraight, score
-    }
+	if isOutsideStraight, score := isStraight(aceHigh[1:]); isOutsideStraight {
+		return isOutsideStraight, score
+	}
 
-    if isHighStraight, score := isStraight(aceHigh[2:]); isHighStraight {
-        return isHighStraight, score
-    }
+	if isHighStraight, score := isStraight(aceHigh[2:]); isHighStraight {
+		return isHighStraight, score
+	}
 
-    if isLowStraight, score := isStraight(aceLow[:aceHigh.Len()-2]); isLowStraight {
-        return isLowStraight, score
-    }
+	if isLowStraight, score := isStraight(aceLow[:aceLow.Len()-2]); isLowStraight {
+		return isLowStraight, score
+	}
 
-    return false, -1
+	return false, -1
 }
 
 func (d Deck) IsFlush(hand Deck) (bool, bool) {
@@ -279,31 +282,31 @@ func (c Card) Color() string {
 func (c Card) Score() int {
 	switch c.face {
 	case 'a':
-		return 13
+		return 14
 	case 'k':
-		return 12
+		return 13
 	case 'q':
-		return 11
+		return 12
 	case 'j':
-		return 10
+		return 11
 	case 't':
-		return 9
+		return 10
 	case '9':
-		return 8
+		return 9
 	case '8':
-		return 7
+		return 8
 	case '7':
-		return 6
+		return 7
 	case '6':
-		return 5
+		return 6
 	case '5':
-		return 4
+		return 5
 	case '4':
-		return 3
+		return 4
 	case '3':
-		return 2
+		return 3
 	case '2':
-		return 1
+		return 2
 	default:
 		return 0
 	}
