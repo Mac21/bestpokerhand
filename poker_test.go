@@ -19,7 +19,7 @@ func buildBoardAndHand(input string) Deck {
 }
 
 func validateStraightTest(deck, hand Deck, expected bool, t *testing.T) {
-	if deck.IsStraight(hand) != expected {
+    if yes := deck.IsStraight(hand); yes != expected {
         t.Fatalf("Board: %v, Hand: %v IsStraight expected %v", deck, hand, expected)
 	}
 }
@@ -176,6 +176,62 @@ func TestFlushBeatsPair(t *testing.T) {
 
 func TestFlushBeatsPocketPair(t *testing.T) {
     deck := buildBoardAndHand("2h8cjc4h3cqckcasah")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
+
+func TestPairBeatsHighcardStraightBug(t *testing.T) {
+    deck := buildBoardAndHand("8h5htdas7s4h8d6dkh")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
+
+func TestStraightBeatsStraight(t *testing.T) {
+    deck := buildBoardAndHand("2c3s4djsah5s6d5hkc")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
+
+func TestFlushBeatsFlush(t *testing.T) {
+    deck := buildBoardAndHand("2c3c4c5hthqc5c6c7c")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
+
+func TestFlushBeatsStraight(t *testing.T) {
+    deck := buildBoardAndHand("2c3c4c5hthqc5c6h7h")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
+
+func TestStraightFlushBeatsFlush(t *testing.T) {
+    deck := buildBoardAndHand("2c3c4c5cth6c7cqc9c")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
+
+func TestQuadsBeatsFlush(t *testing.T) {
+    deck := buildBoardAndHand("2c3c4c5c2h2s2dac9c")
+    board := deck.DealCards(5)
+    winning := deck.DealCards(2)
+    losing := deck
+	validateHandStrength(board, winning, losing,  t)
+}
+
+func TestStraightFlushBeatsStraightFlush(t *testing.T) {
+    deck := buildBoardAndHand("2c3c4c5cth6c7cac9c")
     board := deck.DealCards(5)
     winning := deck.DealCards(2)
     losing := deck
