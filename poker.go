@@ -203,7 +203,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 		for _, group := range groups {
 			if len(group) == 4 {
 				// quads
-				return 8 * handScore
+				return (8 * 8) + handScore
 			}
 
 			if len(group) == 2 {
@@ -214,17 +214,17 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 		// If the board has paired itself and the player has two pair then it's not a full house
 		if numPairs < 3 {
 			// full house
-			return 7 * handScore
+			return (7 * 7) + handScore
 		}
 		fallthrough
 	default:
 		switch {
 		case isStraightFlush:
-			return 9 * (handScore * handScore)
+			return (9 * 9) + handScore
 		case flush:
-			return 6 * handScore
+			return (6 * 6) + handScore
 		case straight:
-			return 5 * straightScore
+			return (5 * 5) + straightScore
 		default:
 			card1Group := groups[card1.Score()]
 			g1len := card1Group.Len()
@@ -233,21 +233,21 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 
 			// Trips
 			if g1len == 3 {
-				return 4 * card1.Score()
+				return (4 * 4) + card1.Score()
 			} else if g2len == 3 {
-				return 4 * card2.Score()
+				return (4 * 4) + card2.Score()
 			}
 
 			// Two pair
 			if g1len == 2 && g2len == 2 && card1.Score() != card2.Score() {
-				return 3 * handScore
+				return (3 * 3) + handScore
 			} else if g1len == 2 {
-				return 2 * card1.Score()
+				return (2 * 2) + card1.Score()
 			} else if g2len == 2 {
-				return 2 * card2.Score()
+				return (2 * 2) + card2.Score()
 			}
 
-			return handScore - 13
+			return handScore - 14
 		}
 	}
 }
