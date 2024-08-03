@@ -223,7 +223,7 @@ func TestStraightFlushBeatsFlush(t *testing.T) {
 }
 
 func TestQuadsBeatsFlush(t *testing.T) {
-    deck := buildBoardAndHand("2c3c4c5c2h2s2dac9c")
+    deck := buildBoardAndHand("2c3c4c5c2h2s2dad9c")
     board := deck.DealCards(5)
     winning := deck.DealCards(2)
     losing := deck
