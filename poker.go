@@ -276,10 +276,6 @@ func (c Card) Color() string {
 	}
 }
 
-func (c Card) IsAce() bool {
-	return c.Score() == 13
-}
-
 func (c Card) Score() int {
 	switch c.face {
 	case 'a':
