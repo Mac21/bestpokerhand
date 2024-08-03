@@ -19,7 +19,7 @@ func buildBoardAndHand(input string) Deck {
 }
 
 func validateStraightTest(deck, hand Deck, expected bool, t *testing.T) {
-    if yes := deck.IsStraight(hand); yes != expected {
+    if yes, _ := deck.IsStraight(hand); yes != expected {
         t.Fatalf("Board: %v, Hand: %v IsStraight expected %v", deck, hand, expected)
 	}
 }
