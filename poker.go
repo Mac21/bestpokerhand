@@ -238,6 +238,8 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 				return (4 * 4) + card2.Score()
 			}
 
+            // TODO: fix issue with board pair not coming into two pair calculation
+            // See test TestTwoPairBeatsTwoPairBoardPaired
 			// Two pair
 			if g1len == 2 && g2len == 2 {
 				return (3 * 3) + handScore
