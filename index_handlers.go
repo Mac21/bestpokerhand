@@ -9,13 +9,13 @@ import (
 )
 
 var (
-    overallScore = 0
-    totalHands = 1
+	overallScore = 0
+	totalHands   = 1
 )
 
 func indexTemplateHandler(c *gin.Context) {
 	overallScore = 0
-    totalHands = 0
+	totalHands = 0
 	deck := NewDeck()
 	deck.Shuffle()
 	board := deck.DealCards(5)
@@ -23,7 +23,7 @@ func indexTemplateHandler(c *gin.Context) {
 	hand2 := deck.DealCards(2)
 	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
 		"overallScore": overallScore,
-        "totalHands": totalHands,
+		"totalHands":   totalHands,
 		"board":        board,
 		"hand1": gin.H{
 			"cards": hand1,
@@ -44,12 +44,12 @@ func runningGameHandler(c *gin.Context) {
 	hand1str, _ := c.GetPostForm("hand1")
 	hand2str, _ := c.GetPostForm("hand2")
 
-    hand1score, _ := strconv.Atoi(hand1scorestr)
-    hand2score, _ := strconv.Atoi(hand2scorestr)
-    fmt.Printf("Board: %s\n", boardstr)
-    fmt.Printf("\tHand1: %s\n", hand1str)
-    fmt.Printf("\tHand2: %s\n", hand2str)
-    fmt.Printf("\tpicked score: %s, hand1score: %d, hand2score: %d, overallscore: %d\n", pickedScore, hand1score, hand2score, overallScore)
+	hand1score, _ := strconv.Atoi(hand1scorestr)
+	hand2score, _ := strconv.Atoi(hand2scorestr)
+	fmt.Printf("Board: %s\n", boardstr)
+	fmt.Printf("\tHand1: %s\n", hand1str)
+	fmt.Printf("\tHand2: %s\n", hand2str)
+	fmt.Printf("\tpicked score: %s, hand1score: %d, hand2score: %d, overallscore: %d\n", pickedScore, hand1score, hand2score, overallScore)
 
 	switch pickedScore {
 	case "hand1":
@@ -61,7 +61,7 @@ func runningGameHandler(c *gin.Context) {
 			overallScore++
 		}
 	}
-    totalHands++
+	totalHands++
 
 	deck := NewDeck()
 	deck.Shuffle()
@@ -70,7 +70,7 @@ func runningGameHandler(c *gin.Context) {
 	hand2 := deck.DealCards(2)
 	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
 		"overallScore": overallScore,
-        "totalHands": totalHands,
+		"totalHands":   totalHands,
 		"board":        board,
 		"hand1": gin.H{
 			"cards": hand1,
