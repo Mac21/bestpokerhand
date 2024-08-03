@@ -3,6 +3,7 @@ package main
 import (
 	"cmp"
 	"crypto/rand"
+	"fmt"
 	"math/big"
 	"slices"
 	"strings"
@@ -112,24 +113,26 @@ func aceLowSort(a, b *Card) int {
 	return (a.Score() % 13) - (b.Score() % 13)
 }
 
-func isStraight(hand Deck) bool {
+func isStraight(hand Deck) (bool, int) {
 	n := hand.Len()
 	if n < 5 {
-		return false
+		return false, -1
 	}
 
-	runningCount := hand[0].Score()
+	runningCount := hand[0].Score() % 13
 	for i := 0; i < n; i++ {
 		c := hand[i]
-		if runningCount != c.Score() {
-            return false
+		if (runningCount % 13) != (c.Score() % 13) {
+            fmt.Println(c, runningCount, c.Score())
+            return false, runningCount
 		}
+        runningCount++
 	}
 
-	return true 
+	return true, runningCount
 }
 
-func (d Deck) IsStraight(hand Deck) bool {
+func (d Deck) IsStraight(hand Deck) (bool, int) {
 	var aceHigh Deck
 	aceHigh = append(aceHigh, d...)
 	aceHigh = append(aceHigh, hand...)
@@ -141,9 +144,19 @@ func (d Deck) IsStraight(hand Deck) bool {
 	aceLow := slices.Clone(aceHigh)
 	slices.SortFunc(aceLow, aceLowSort)
 
-    isHighStraight := 
+    if isOutsideStraight, score := isStraight(aceHigh[1:]); isOutsideStraight {
+        return isOutsideStraight, score
+    }
 
-    return  || isStraight(aceLow) || isStraight(aceHigh[1:]) || isStraight(aceHigh[2:])
+    if isHighStraight, score := isStraight(aceHigh[2:]); isHighStraight {
+        return isHighStraight, score
+    }
+
+    if isLowStraight, score := isStraight(aceLow[:aceHigh.Len()-2]); isLowStraight {
+        return isLowStraight, score
+    }
+
+    return false, -1
 }
 
 func (d Deck) IsFlush(hand Deck) (bool, bool) {
@@ -179,7 +192,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 	card2 := hand[1]
 	handScore := max(card1.Score(), card2.Score())
 	flush, isStraightFlush := d.IsFlush(hand)
-	straight, straightHighCard := d.IsStraight(hand)
+	straight, straightScore := d.IsStraight(hand)
 
 	switch len(groups) {
 	case 4:
@@ -204,11 +217,11 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 	default:
 		switch {
 		case isStraightFlush:
-			return 9 * (straightHighCard.Score() * straightHighCard.Score())
+			return 9 * (handScore * handScore)
 		case flush:
 			return 6 * handScore
 		case straight:
-			return 5 * straightHighCard.Score()
+			return 5 * straightScore
 		default:
 			card1Group := groups[card1.Score()]
 			g1len := card1Group.Len()
