@@ -8,22 +8,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	overallScore = 0
-	totalHands   = 1
-)
-
 func indexTemplateHandler(c *gin.Context) {
-	overallScore = 0
-	totalHands = 0
+	session := getSession(c)
+	session.Set("overallScore", 0)
+	session.Set("numHands", 0)
+	session.Save()
 	deck := NewDeck()
 	deck.Shuffle()
 	board := deck.DealCards(5)
 	hand1 := deck.DealCards(2)
 	hand2 := deck.DealCards(2)
 	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
-		"overallScore": overallScore,
-		"totalHands":   totalHands,
+		"overallScore": 0,
+		"numHands":     0,
 		"board":        board,
 		"hand1": gin.H{
 			"cards": hand1,
@@ -37,6 +34,9 @@ func indexTemplateHandler(c *gin.Context) {
 }
 
 func runningGameHandler(c *gin.Context) {
+	session := getSession(c)
+	overallScore := session.Get("overallScore").(int)
+	numHands := session.Get("numHands").(int)
 	pickedScore, _ := c.GetPostForm("chosenscore")
 	hand1scorestr, _ := c.GetPostForm("hand1score")
 	hand2scorestr, _ := c.GetPostForm("hand2score")
@@ -46,6 +46,7 @@ func runningGameHandler(c *gin.Context) {
 
 	hand1score, _ := strconv.Atoi(hand1scorestr)
 	hand2score, _ := strconv.Atoi(hand2scorestr)
+
 	fmt.Printf("Board: %s\n", boardstr)
 	fmt.Printf("\tHand1: %s\n", hand1str)
 	fmt.Printf("\tHand2: %s\n", hand2str)
@@ -61,7 +62,10 @@ func runningGameHandler(c *gin.Context) {
 			overallScore++
 		}
 	}
-	totalHands++
+	numHands++
+	session.Set("numHands", numHands)
+	session.Set("overallScore", overallScore)
+	session.Save()
 
 	deck := NewDeck()
 	deck.Shuffle()
@@ -70,7 +74,7 @@ func runningGameHandler(c *gin.Context) {
 	hand2 := deck.DealCards(2)
 	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
 		"overallScore": overallScore,
-		"totalHands":   totalHands,
+		"numHands":     numHands,
 		"board":        board,
 		"hand1": gin.H{
 			"cards": hand1,
