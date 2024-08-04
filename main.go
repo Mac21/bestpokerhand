@@ -15,7 +15,7 @@ var (
 	APIHost = "localhost"
 	// APIPort is the port the api listens on
 	APIPort      = "9090"
-	CookieSecret = ""
+	CookieSecret = "123"
 )
 
 func init() {
@@ -23,11 +23,9 @@ func init() {
 	gin.SetMode(gin.DebugMode)
 
 	// Gitlab-ci defines PORT in the env which is what the kube service exposed port will be
-	if port := os.Getenv("PORT"); port != "" {
-		APIPort = port
-	}
-	APIHost = getEnv("HOST")
-	CookieSecret = getEnv("COOKIE_SECRET")
+	APIPort = getEnvDefault("PORT", APIPort)
+	APIHost = getEnvDefault("HOST", APIHost)
+	CookieSecret = getEnvDefault("COOKIE_SECRET", CookieSecret)
 }
 
 func errorMissingEnv(env string) {
