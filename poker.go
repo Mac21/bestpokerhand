@@ -221,15 +221,15 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 	case isStraightFlush:
 		return (9 * 9) + handScore
 	case !hasQuads.Empty():
-		return (8 * 8) + hasQuads[0].Score()
+		return (8 * 8) + hasQuads[hasQuads.Len()-1].Score()
 	case !hasTrips.Empty() && !hasPair.Empty():
-		return (7 * 7) + hasTrips[0].Score()
+		return (7 * 7) + hasTrips[hasTrips.Len()-1].Score()
 	case flush:
 		return (6 * 6) + handScore
 	case straight:
 		return (5 * 5) + straightScore
 	case !hasTrips.Empty():
-		return (4 * 4) + hasTrips[0].Score()
+		return (4 * 4) + hasTrips[hasTrips.Len()-1].Score()
 	case !hasPair.Empty():
 		// Two pair or pair
 		return (3 * 3) + hasPair[hasPair.Len()-1].Score()
