@@ -5,6 +5,8 @@ import (
 	"net"
 	"os"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,8 +14,8 @@ var (
 	// APIHost is the address the api listens on
 	APIHost = "localhost"
 	// APIPort is the port the api listens on
-	APIPort = "9090"
-	// APIKey used for auth on rest end points
+	APIPort      = "9090"
+	CookieSecret = ""
 )
 
 func init() {
@@ -24,6 +26,8 @@ func init() {
 	if port := os.Getenv("PORT"); port != "" {
 		APIPort = port
 	}
+	APIHost = getEnv("HOST")
+	CookieSecret = getEnv("COOKIE_SECRET")
 }
 
 func errorMissingEnv(env string) {
@@ -46,12 +50,30 @@ func getEnv(key string) string {
 	return tempEnvVar
 }
 
+func getSession(ctx *gin.Context) sessions.Session {
+	session := sessions.Default(ctx)
+	session.Options(sessions.Options{
+		Path: "/",
+	})
+
+	return session
+}
+
 func main() {
 	rtr := gin.Default()
 	rtr.SetTrustedProxies([]string{
 		"127.0.0.1",
 		"localhost",
 	})
+
+	store := cookie.NewStore([]byte(CookieSecret))
+	store.Options(sessions.Options{
+		Secure: true,
+	})
+
+	rtr.Use(
+		sessions.Sessions("session", store),
+	)
 
 	rtr.HTMLRender = loadTemplates("./templates")
 	rtr.Static("/static", "./static")
