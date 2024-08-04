@@ -87,6 +87,10 @@ func (d Deck) Len() int {
 	return len(d)
 }
 
+func (d Deck) Empty() bool {
+	return len(d) == 0
+}
+
 func (d Deck) Shuffle() Deck {
 	for _, c := range d {
 		v, _ := rand.Int(rand.Reader, big.NewInt(64))
@@ -181,76 +185,60 @@ func (d Deck) IsFlush(hand Deck) (bool, bool) {
 	return false, false
 }
 
+func (d Deck) getPairs() map[int]Deck {
+	groups := make(map[int]Deck)
+	for _, c := range d {
+		groups[c.Score()] = append(groups[c.Score()], c)
+	}
+
+	pairs := make(map[int]Deck)
+	for _, g := range groups {
+		pairs[g.Len()] = append(pairs[g.Len()], g[0])
+	}
+
+	for _, set := range pairs {
+		slices.SortFunc(set, aceHighSort)
+	}
+
+	return pairs
+}
+
 func (d Deck) AnalyzeHand(hand Deck) int {
 	var cards Deck
 	cards = append(cards, d...)
 	cards = append(cards, hand...)
 
-	groups := make(map[int]Deck)
-	for _, c := range cards {
-		groups[c.Score()] = append(groups[c.Score()], c)
-	}
-
-	card1 := hand[0]
-	card2 := hand[1]
-	handScore := max(card1.Score(), card2.Score())
+	handScore := max(hand[0].Score(), hand[1].Score())
 	flush, isStraightFlush := d.IsFlush(hand)
 	straight, straightScore := d.IsStraight(hand)
 
-	switch len(groups) {
-	case 4:
-		numPairs := 0
-		for _, group := range groups {
-			if len(group) == 4 {
-				// quads
-				return (8 * 8) + handScore
-			}
+	groups := cards.getPairs()
+	hasQuads := groups[4]
+	hasTrips := groups[3]
+	hasPair := groups[2]
 
-			if len(group) == 2 {
-				numPairs++
-			}
+	switch {
+	case isStraightFlush:
+		return (9 * 9) + handScore
+	case !hasQuads.Empty():
+		return (8 * 8) + hasQuads[0].Score()
+	case !hasTrips.Empty() && !hasPair.Empty():
+		return (7 * 7) + hasTrips[0].Score()
+	case flush:
+		return (6 * 6) + handScore
+	case straight:
+		return (5 * 5) + straightScore
+	case !hasTrips.Empty():
+		return (4 * 4) + hasTrips[0].Score()
+	case !hasPair.Empty():
+		// Two pair or pair
+		if hasPair.Len() == 1 {
+			return (2 * 2) + hasPair[0].Score()
 		}
-
-		// If the board has paired itself and the player has two pair then it's not a full house
-		if numPairs < 3 {
-			// full house
-			return (7 * 7) + handScore
-		}
-		fallthrough
+		highPair := hasPair[hasPair.Len()-1]
+		return (3 * 3) + highPair.Score()
 	default:
-		switch {
-		case isStraightFlush:
-			return (9 * 9) + handScore
-		case flush:
-			return (6 * 6) + handScore
-		case straight:
-			return (5 * 5) + straightScore
-		default:
-			card1Group := groups[card1.Score()]
-			g1len := card1Group.Len()
-			card2Group := groups[card2.Score()]
-			g2len := card2Group.Len()
-
-			// Trips
-			if g1len == 3 {
-				return (4 * 4) + card1.Score()
-			} else if g2len == 3 {
-				return (4 * 4) + card2.Score()
-			}
-
-            // TODO: fix issue with board pair not coming into two pair calculation
-            // See test TestTwoPairBeatsTwoPairBoardPaired
-			// Two pair
-			if g1len == 2 && g2len == 2 {
-				return (3 * 3) + handScore
-			} else if g1len == 2 {
-				return (2 * 2) + card1.Score()
-			} else if g2len == 2 {
-				return (2 * 2) + card2.Score()
-			}
-
-			return handScore - 14
-		}
+		return handScore - 14
 	}
 }
 
