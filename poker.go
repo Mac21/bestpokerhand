@@ -232,11 +232,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 		return (4 * 4) + hasTrips[0].Score()
 	case !hasPair.Empty():
 		// Two pair or pair
-		if hasPair.Len() == 1 {
-			return (2 * 2) + hasPair[0].Score()
-		}
-		highPair := hasPair[hasPair.Len()-1]
-		return (3 * 3) + highPair.Score()
+		return (3 * 3) + hasPair[hasPair.Len()-1].Score()
 	default:
 		return handScore - 14
 	}
