@@ -8,7 +8,7 @@ if [[ "$?" -ne "" ]]; then
 fi
 
 if [[ ! -f "app" ]]; then
-  echo "Error: random-ivr-label executable missing"
+  echo "Error: app executable missing"
   exit 1
 else
     env $(cat secrets) ./app
