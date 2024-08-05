@@ -11,7 +11,7 @@
         });
     </script>
     <div class="card">
-        <div class="card-header">
+        <div class="card-header bg-dark border-light text-light">
             <div class="row">
                 <div class="col">
                     <h4>Best Poker Hand</h4>
@@ -26,46 +26,44 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <form action="/current" method="post">
+        <div class="card-body bg-success text-center">
+            <form class="container" action="/current" method="post">
                 <input type="text" id="chosenscore" name="chosenscore" hidden value="none">
                 <input type="text" id="board" name="board" hidden value="{{ .board }}">
                 <input type="text" id="hand1" name="hand1" hidden value="{{ .hand1.cards }}">
                 <input type="text" id="hand2" name="hand2" hidden value="{{ .hand2.cards }}">
                 <input type="number" id="hand1score" name="hand1score" hidden value="{{ .hand1.score }}">
                 <input type="number" id="hand2score" name="hand2score" hidden value="{{ .hand2.score }}">
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-4">
-                        <h1>
-                            {{ range .board }}
-                                <span style="color: {{ .Color }}">{{ .UnicodeString }}</span>
-                            {{ end }}
-                        </h1>
+                <div class="row p-2">
+                    <div class="col">
+                        <div class="badge border border-2 rounded-pill border-warning p-2">
+                            <h1>
+                                {{- range .board -}}
+                                    <span class="p-1" style="color: {{ .Color }}">{{ .UnicodeString }}</span>
+                                {{- end -}}
+                            </h1>
+                        </div>
                     </div>
-                    <div class="col-4"></div>
                 </div>
                 <div class="row">
-                    <div class="col-3"></div>
-                    <div class="col-3">
-                        <button id="hand1submit" class="btn">
+                    <div class="col">
+                        <button id="hand1submit" class="btn border border-2 border-light">
                             <h2>
-                                {{ range .hand1.cards }}
+                                {{- range .hand1.cards -}}
                                     <span style="color: {{ .Color }}">{{ .UnicodeString }}</span>
-                                {{ end }}
+                                {{- end -}}
                             </h2>
                         </button>
                     </div>
-                    <div class="col-3">
-                        <button id="hand2submit" class="btn">
+                    <div class="col">
+                        <button id="hand2submit" class="btn border border-2 border-light">
                             <h2>
-                                {{ range .hand2.cards }}
+                                {{- range .hand2.cards -}}
                                     <span style="color: {{ .Color }}">{{ .UnicodeString }}</span>
-                                {{ end }}
+                                {{- end -}}
                             </h2>
                         </button>
                     </div>
-                    <div class="col-3"></div>
                 </div>
             </form>
         </div>
