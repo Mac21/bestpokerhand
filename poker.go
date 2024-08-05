@@ -255,7 +255,7 @@ func (c Card) String() string {
 func (c Card) Color() string {
 	switch c.suit {
 	case 'c':
-		return "green"
+		return "yellowgreen"
 	case 'd':
 		return "blue"
 	case 'h':
