@@ -10,9 +10,23 @@
         <link rel="stylesheet" href="/static/font-awesome.min.css"/>
         <script type="text/javascript" src="/static/jquery-3.6.0.min.js"></script>
         <title>Best Poker Hand</title>
+        <style>
+            @font-face {
+                font-family: Dejavu;
+                src: url('/static/DejaVuSansMono.ttf');
+            }
+
+            .hand {
+                font-family: Dejavu !important;
+                font-size: 5rem !important;
+                font-weight: 500 !important;
+                display: inline-flex;
+                text-shadow: 1px 2px black;
+            }
+        </style>
     </head>
     <body>
-        <div class="container-fluid pt-4 mt-4">
+        <div class="container-fluid">
             {{ template "content" . }}
         </div>
         <!-- Option 1: Bootstrap Bundle with Popper -->
