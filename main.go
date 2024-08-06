@@ -15,6 +15,8 @@ var (
 	APIHost = "localhost"
 	// APIPort is the port the api listens on
 	APIPort      = "9090"
+	Cert         = "./certs/cert.pem"
+	CertKey      = "./certs/cert.key"
 	CookieSecret = "123"
 )
 
@@ -76,5 +78,5 @@ func main() {
 	rtr.HTMLRender = loadTemplates("./templates")
 	rtr.Static("/static", "./static")
 	initRoutes(rtr)
-	rtr.Run(net.JoinHostPort(APIHost, APIPort))
+	rtr.RunTLS(net.JoinHostPort(APIHost, APIPort), Cert, CertKey)
 }
