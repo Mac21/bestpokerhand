@@ -11,5 +11,5 @@ if [[ ! -f "app" ]]; then
   echo "Error: app executable missing"
   exit 1
 else
-    env $(cat secrets) ./app
+    sudo env $(cat secrets) ./app
 fi
