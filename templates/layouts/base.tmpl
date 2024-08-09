@@ -12,8 +12,12 @@
         <title>Best Poker Hand</title>
         <style>
             @font-face {
-                font-family: Dejavu;
-                src: url('/static/DejaVuSansMono.ttf');
+                font-family: 'Dejavu';
+                src: url('static/dejavu_sans_mono.woff2') format('woff2'),
+                     url('static/dejavu_sans_mono.woff') format('woff'),
+                     url('static/dejavu_sans_mono.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
             }
 
             .hand {
@@ -21,7 +25,7 @@
                 font-size: 5rem !important;
                 font-weight: 500 !important;
                 display: inline-flex;
-                text-shadow: 1px 2px black;
+                text-shadow: 1px 1px grey;
             }
         </style>
     </head>
