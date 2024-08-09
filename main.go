@@ -27,6 +27,8 @@ func init() {
 	// Gitlab-ci defines PORT in the env which is what the kube service exposed port will be
 	APIPort = getEnvDefault("PORT", APIPort)
 	APIHost = getEnvDefault("HOST", APIHost)
+	Cert = getEnvDefault("CERT", Cert)
+	CertKey = getEnvDefault("CERT_KEY", CertKey)
 	CookieSecret = getEnvDefault("COOKIE_SECRET", CookieSecret)
 }
 
