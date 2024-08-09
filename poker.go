@@ -103,6 +103,10 @@ func (d Deck) Shuffle() Deck {
 }
 
 func (d *Deck) DealCards(n int) Deck {
+	if d.Empty() {
+		return nil
+	}
+
 	hand := (*d)[:n]
 	*d = (*d)[n:]
 	return hand
@@ -122,11 +126,11 @@ func isStraight(hand Deck) (bool, int) {
 		return false, -1
 	}
 
-	runningCount := hand[0].Score() % 14
+	runningCount := hand[0].Score()
 	for i := 0; i < n; i++ {
 		c := hand[i]
 		if (runningCount % 14) != (c.Score() % 14) {
-			return false, runningCount
+			return false, -1
 		}
 
 		if c.Score() == 14 {
@@ -136,7 +140,7 @@ func isStraight(hand Deck) (bool, int) {
 		}
 	}
 
-	return true, runningCount
+	return true, runningCount % 14
 }
 
 func (d Deck) IsStraight(hand Deck) (bool, int) {
@@ -151,12 +155,24 @@ func (d Deck) IsStraight(hand Deck) (bool, int) {
 	aceLow := slices.Clone(aceHigh)
 	slices.SortFunc(aceLow, aceLowSort)
 
+	if isOutsideStraight, score := isStraight(aceHigh); isOutsideStraight {
+		return isOutsideStraight, score
+	}
+
 	if isOutsideStraight, score := isStraight(aceHigh[1:]); isOutsideStraight {
 		return isOutsideStraight, score
 	}
 
 	if isHighStraight, score := isStraight(aceHigh[2:]); isHighStraight {
 		return isHighStraight, score
+	}
+
+	if isLowStraight, score := isStraight(aceLow); isLowStraight {
+		return isLowStraight, score
+	}
+
+	if isLowStraight, score := isStraight(aceLow[:aceLow.Len()-1]); isLowStraight {
+		return isLowStraight, score
 	}
 
 	if isLowStraight, score := isStraight(aceLow[:aceLow.Len()-2]); isLowStraight {
@@ -166,7 +182,7 @@ func (d Deck) IsStraight(hand Deck) (bool, int) {
 	return false, -1
 }
 
-func (d Deck) IsFlush(hand Deck) (bool, bool) {
+func (d Deck) IsFlush(hand Deck) (bool, bool, int) {
 	var cards Deck
 	cards = append(cards, d...)
 	cards = append(cards, hand...)
@@ -178,11 +194,12 @@ func (d Deck) IsFlush(hand Deck) (bool, bool) {
 
 	for _, groups := range flushgroups {
 		if groups.Len() > 4 {
+			slices.SortFunc(groups, aceHighSort)
 			isStraight, _ := isStraight(groups)
-			return true, isStraight
+			return true, isStraight, groups[groups.Len()-1].Score()
 		}
 	}
-	return false, false
+	return false, false, -1
 }
 
 func (d Deck) getPairs() map[int]Deck {
@@ -208,8 +225,8 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 	cards = append(cards, d...)
 	cards = append(cards, hand...)
 
-	handScore := max(hand[0].Score(), hand[1].Score())
-	flush, isStraightFlush := d.IsFlush(hand)
+	handScore := hand[0].Score() + hand[1].Score() - 28
+	flush, isStraightFlush, flushScore := d.IsFlush(hand)
 	straight, straightScore := d.IsStraight(hand)
 
 	groups := cards.getPairs()
@@ -219,22 +236,25 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 
 	switch {
 	case isStraightFlush:
-		return (9 * 9) + handScore
+		return (9 * 9 * 9) + flushScore + straightScore
 	case !hasQuads.Empty():
-		return (8 * 8) + hasQuads[hasQuads.Len()-1].Score()
+		return (8 * 8 * 8) + hasQuads[hasQuads.Len()-1].Score()
 	case !hasTrips.Empty() && !hasPair.Empty():
-		return (7 * 7) + hasTrips[hasTrips.Len()-1].Score()
+		return (7 * 7 * 7) + hasTrips[hasTrips.Len()-1].Score()
 	case flush:
-		return (6 * 6) + handScore
+		return (6 * 6 * 6) + flushScore
 	case straight:
-		return (5 * 5) + straightScore
+		return (5 * 5 * 5) + straightScore
 	case !hasTrips.Empty():
-		return (4 * 4) + hasTrips[hasTrips.Len()-1].Score()
+		return (4 * 4 * 4) + hasTrips[hasTrips.Len()-1].Score() + handScore
 	case !hasPair.Empty():
 		// Two pair or pair
-		return (3 * 3) + hasPair[hasPair.Len()-1].Score()
+		if hasPair.Len() > 1 {
+			return (3 * 3 * 3) + hasPair[hasPair.Len()-2].Score() + hasPair[hasPair.Len()-1].Score()
+		}
+		return (2 * 2 * 2) + hasPair[hasPair.Len()-1].Score()
 	default:
-		return handScore - 14
+		return handScore
 	}
 }
 
