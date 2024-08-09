@@ -27,7 +27,7 @@ func validateStraightTest(deck, hand Deck, expected bool, t *testing.T) {
 func validateHandStrength(board, winning, losing Deck, t *testing.T) {
 	winningScore := board.AnalyzeHand(winning)
 	losingScore := board.AnalyzeHand(losing)
-	winningLess := winningScore < losingScore
+	winningLess := winningScore <= losingScore
 	if winningLess {
 		t.Fatalf("Board: %v, Winning: %v(%d), Losing: %v(%d) expected winning > losing got winning < losing", board, winning, winningScore, losing, losingScore)
 	}
@@ -85,7 +85,7 @@ func TestQuadsBeatsFullhouse(t *testing.T) {
 }
 
 func TestTripsBeatsTrips(t *testing.T) {
-	deck := buildBoardAndHand("asacqsjs2had4hah4c")
+	deck := buildBoardAndHand("asacqsjs2had4hah3c")
 	board := deck.DealCards(5)
 	winning := deck.DealCards(2)
 	losing := deck
