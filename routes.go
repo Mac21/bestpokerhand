@@ -6,5 +6,6 @@ import (
 
 func initRoutes(rtr *gin.Engine) {
 	rtr.GET("/", indexTemplateHandler)
-	rtr.POST("/current", runningGameHandler)
+	rtr.GET("/newgame", newGameHandler)
+	rtr.POST("/score", runningGameHandler)
 }

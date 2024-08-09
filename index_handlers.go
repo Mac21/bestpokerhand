@@ -10,8 +10,8 @@ import (
 
 func indexTemplateHandler(c *gin.Context) {
 	session := getSession(c)
-	session.Set("overallScore", 0)
-	session.Set("numHands", 0)
+    overallScore, _ := session.Get("overallScore").(int)
+    numHands, _ := session.Get("numHands").(int)
 	session.Save()
 	deck := NewDeck()
 	deck.Shuffle()
@@ -19,8 +19,8 @@ func indexTemplateHandler(c *gin.Context) {
 	hand1 := deck.DealCards(2)
 	hand2 := deck.DealCards(2)
 	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
-		"overallScore": 0,
-		"numHands":     0,
+		"overallScore": overallScore,
+		"numHands":     numHands,
 		"board":        board,
 		"hand1": gin.H{
 			"cards": hand1,
@@ -31,6 +31,14 @@ func indexTemplateHandler(c *gin.Context) {
 			"score": board.AnalyzeHand(hand2),
 		},
 	})
+}
+
+func newGameHandler(c *gin.Context) {
+	session := getSession(c)
+	session.Set("overallScore", 0)
+	session.Set("numHands", 0)
+	session.Save()
+    c.Redirect(http.StatusFound, "/")
 }
 
 func runningGameHandler(c *gin.Context) {
@@ -61,28 +69,11 @@ func runningGameHandler(c *gin.Context) {
 		if hand2score >= hand1score {
 			overallScore++
 		}
+    default:
 	}
 	numHands++
 	session.Set("numHands", numHands)
 	session.Set("overallScore", overallScore)
 	session.Save()
-
-	deck := NewDeck()
-	deck.Shuffle()
-	board := deck.DealCards(5)
-	hand1 := deck.DealCards(2)
-	hand2 := deck.DealCards(2)
-	renderHTML(c, http.StatusOK, "index.tmpl", gin.H{
-		"overallScore": overallScore,
-		"numHands":     numHands,
-		"board":        board,
-		"hand1": gin.H{
-			"cards": hand1,
-			"score": board.AnalyzeHand(hand1),
-		},
-		"hand2": gin.H{
-			"cards": hand2,
-			"score": board.AnalyzeHand(hand2),
-		},
-	})
+    c.Redirect(http.StatusFound, "/")
 }
