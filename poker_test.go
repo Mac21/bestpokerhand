@@ -62,6 +62,13 @@ func TestNoStraight(t *testing.T) {
 	validateStraightTest(board, hand, false, t)
 }
 
+func TestQueenHighStraight(t *testing.T) {
+	deck := buildBoardAndHand("9djdqdqsadth8h")
+	board := deck.DealCards(5)
+	hand := deck
+	validateStraightTest(board, hand, true, t)
+}
+
 func TestOutsideStraight(t *testing.T) {
 	deck := buildBoardAndHand("9c2ctcqdjhkd7d")
 	board := deck.DealCards(5)
@@ -261,6 +268,14 @@ func TestPairkickerBeatsPairkicker(t *testing.T) {
 
 func TestPairkickerTiesPairkicker(t *testing.T) {
 	deck := buildBoardAndHand("2d6h7ctsqhqcasqdad")
+	board := deck.DealCards(5)
+	winning := deck.DealCards(2)
+	losing := deck
+	validateHandStrength(board, winning, losing, t)
+}
+
+func TestStraightBeatsTwoPair(t *testing.T) {
+	deck := buildBoardAndHand("9djdqdqsadth8hjcts")
 	board := deck.DealCards(5)
 	winning := deck.DealCards(2)
 	losing := deck
