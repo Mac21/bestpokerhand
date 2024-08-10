@@ -10,8 +10,18 @@ import (
 
 func indexTemplateHandler(c *gin.Context) {
 	session := getSession(c)
-    overallScore, _ := session.Get("overallScore").(int)
-    numHands, _ := session.Get("numHands").(int)
+    overallScore, hasOverallScore := session.Get("overallScore").(int)
+    if !hasOverallScore {
+        session.Set("overallScore", 0)
+        overallScore = 0
+    }
+
+    numHands, hasNumHands := session.Get("numHands").(int)
+    if !hasNumHands {
+        session.Set("numHands", 0)
+        numHands = 0
+    }
+
 	session.Save()
 	deck := NewDeck()
 	deck.Shuffle()
