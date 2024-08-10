@@ -27,7 +27,8 @@ func validateStraightTest(deck, hand Deck, expected bool, t *testing.T) {
 func validateHandStrength(board, winning, losing Deck, t *testing.T) {
 	winningScore := board.AnalyzeHand(winning)
 	losingScore := board.AnalyzeHand(losing)
-	winningLess := winningScore <= losingScore
+	winningLess := winningScore < losingScore
+    t.Logf("Board: %v, Winning: %v(%d), Losing: %v(%d)", board, winning, winningScore, losing, losingScore)
 	if winningLess {
 		t.Fatalf("Board: %v, Winning: %v(%d), Losing: %v(%d) expected winning > losing got winning < losing", board, winning, winningScore, losing, losingScore)
 	}
@@ -244,6 +245,22 @@ func TestQuadsBeatsFlush(t *testing.T) {
 
 func TestStraightFlushBeatsStraightFlush(t *testing.T) {
 	deck := buildBoardAndHand("2c3c4c5cth6c7cac9c")
+	board := deck.DealCards(5)
+	winning := deck.DealCards(2)
+	losing := deck
+	validateHandStrength(board, winning, losing, t)
+}
+
+func TestPairkickerBeatsPairkicker(t *testing.T) {
+	deck := buildBoardAndHand("2d6h7ctsqhqcasqdjs")
+	board := deck.DealCards(5)
+	winning := deck.DealCards(2)
+	losing := deck
+	validateHandStrength(board, winning, losing, t)
+}
+
+func TestPairkickerTiesPairkicker(t *testing.T) {
+	deck := buildBoardAndHand("2d6h7ctsqhqcasqdad")
 	board := deck.DealCards(5)
 	winning := deck.DealCards(2)
 	losing := deck
