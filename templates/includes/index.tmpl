@@ -44,20 +44,22 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col">
+                    <div class="col-4"></div>
+                    <div class="col-2">
                         <button id="hand1submit" class="btn border border-2 border-light">
                             {{- range .hand1.cards -}}
                                 <p class="hand" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
                             {{- end -}}
                         </button>
                     </div>
-                    <div class="col">
+                    <div class="col-2">
                         <button id="hand2submit" class="btn border border-2 border-light">
                             {{- range .hand2.cards -}}
                                 <p class="hand" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
                             {{- end -}}
                         </button>
                     </div>
+                    <div class="col-4"></div>
                 </div>
             </form>
         </div>
