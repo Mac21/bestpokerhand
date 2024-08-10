@@ -155,28 +155,22 @@ func (d Deck) IsStraight(hand Deck) (bool, int) {
 	aceLow := slices.Clone(aceHigh)
 	slices.SortFunc(aceLow, aceLowSort)
 
-	if isOutsideStraight, score := isStraight(aceHigh); isOutsideStraight {
-		return isOutsideStraight, score
-	}
+	for i := 1; i < 3; i++ {
+		if yes, score := isStraight(aceHigh[i:]); yes {
+			return yes, score
+		}
 
-	if isOutsideStraight, score := isStraight(aceHigh[1:]); isOutsideStraight {
-		return isOutsideStraight, score
-	}
+		if yes, score := isStraight(aceHigh[:aceHigh.Len()-i]); yes {
+			return yes, score
+		}
 
-	if isHighStraight, score := isStraight(aceHigh[2:]); isHighStraight {
-		return isHighStraight, score
-	}
+		if yes, score := isStraight(aceLow[i:]); yes {
+			return yes, score
+		}
 
-	if isLowStraight, score := isStraight(aceLow); isLowStraight {
-		return isLowStraight, score
-	}
-
-	if isLowStraight, score := isStraight(aceLow[:aceLow.Len()-1]); isLowStraight {
-		return isLowStraight, score
-	}
-
-	if isLowStraight, score := isStraight(aceLow[:aceLow.Len()-2]); isLowStraight {
-		return isLowStraight, score
+		if yes, score := isStraight(aceLow[:aceLow.Len()-i]); yes {
+			return yes, score
+		}
 	}
 
 	return false, -1
