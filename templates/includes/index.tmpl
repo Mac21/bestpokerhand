@@ -14,7 +14,9 @@
         <div class="card-header bg-dark border-light text-light">
             <div class="row">
                 <div class="col">
-                    <h4>Best Poker Hand</h4>
+                    <h4>
+                        Best Poker Hand <span class="badge bg-primary rounded-circle">?</span>
+                    </h4>
                 </div>
                 <div class="col text-center">
                     <h4>
@@ -44,22 +46,20 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-2">
+                    <div class="col">
                         <button id="hand1submit" class="btn border border-2 border-light">
                             {{- range .hand1.cards -}}
                                 <p class="hand" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
                             {{- end -}}
                         </button>
                     </div>
-                    <div class="col-2">
+                    <div class="col">
                         <button id="hand2submit" class="btn border border-2 border-light">
                             {{- range .hand2.cards -}}
                                 <p class="hand" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
                             {{- end -}}
                         </button>
                     </div>
-                    <div class="col-4"></div>
                 </div>
             </form>
         </div>
