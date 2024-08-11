@@ -8,15 +8,26 @@
             $("#hand2submit").click((e) => {
                 $("#chosenscore").prop("value", "hand2");
             });
+
+            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {
+                html: true,
+            }));
         });
     </script>
     <div class="card">
         <div class="card-header bg-dark border-light text-light">
             <div class="row">
                 <div class="col">
-                    <h4>
-                        Best Poker Hand <span class="badge bg-primary rounded-circle">?</span>
-                    </h4>
+                    <h4 class="site-title">Best Poker Hand</h4>
+                    <h6 class="site-title">
+                        <span class="badge bg-primary rounded-circle"
+                           tabindex="0"
+                           data-bs-toggle="popover"
+                           data-bs-placement="right"
+                           data-bs-title="How to play"
+                           data-bs-content="Click one of two hands that make the best 5 card <a target=_blank href=https://en.wikipedia.org/wiki/Texas_hold_'em#Hand_values>hand</a>.">?</span>
+                    </h6>
                 </div>
                 <div class="col text-center">
                     <h4>
