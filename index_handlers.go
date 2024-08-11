@@ -21,8 +21,8 @@ func indexTemplateHandler(c *gin.Context) {
         session.Set("numHands", 0)
         numHands = 0
     }
-
 	session.Save()
+
 	deck := NewDeck()
 	deck.Shuffle()
 	board := deck.DealCards(5)
@@ -55,10 +55,10 @@ func runningGameHandler(c *gin.Context) {
 	session := getSession(c)
 	overallScore := session.Get("overallScore").(int)
 	numHands := session.Get("numHands").(int)
+	boardstr, _ := c.GetPostForm("board")
 	pickedScore, _ := c.GetPostForm("chosenscore")
 	hand1scorestr, _ := c.GetPostForm("hand1score")
 	hand2scorestr, _ := c.GetPostForm("hand2score")
-	boardstr, _ := c.GetPostForm("board")
 	hand1str, _ := c.GetPostForm("hand1")
 	hand2str, _ := c.GetPostForm("hand2")
 
@@ -79,7 +79,6 @@ func runningGameHandler(c *gin.Context) {
 		if hand2score >= hand1score {
 			overallScore++
 		}
-    default:
 	}
 	numHands++
 	session.Set("numHands", numHands)
