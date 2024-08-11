@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Dejavu';
-    src: url('static/dejavu_sans_mono.woff2') format('woff2'),
-         url('static/dejavu_sans_mono.woff') format('woff'),
-         url('static/dejavu_sans_mono.ttf') format('truetype');
+    src: url('dejavu_sans_mono.woff2') format('woff2'),
+         url('dejavu_sans_mono.woff') format('woff'),
+         url('dejavu_sans_mono.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
