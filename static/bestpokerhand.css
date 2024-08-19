@@ -1,18 +1,9 @@
-@font-face {
-    font-family: 'Dejavu';
-    src: url('dejavu_sans_mono.woff2') format('woff2'),
-         url('dejavu_sans_mono.woff') format('woff'),
-         url('dejavu_sans_mono.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 .hand {
-    font-family: Dejavu !important;
-    font-size: 5rem !important;
-    font-weight: 500 !important;
     display: inline-flex;
-    text-shadow: 1px 1px grey;
+    min-width: 80px;
+    min-height: 80px;
+    width: 140px;
+    height: 140px;
 }
 
 .site-title {
