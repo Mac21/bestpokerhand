@@ -1,9 +1,7 @@
 .hand {
     display: inline-flex;
-    min-width: 80px;
-    min-height: 80px;
-    width: 140px;
-    height: 140px;
+    max-width: 7vw;
+    max-height: 10vh;
 }
 
 .site-title {

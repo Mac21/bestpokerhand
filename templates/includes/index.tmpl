@@ -49,7 +49,7 @@
                 <input type="number" id="hand2score" name="hand2score" hidden value="{{ .hand2.score }}">
                 <div class="row pb-4">
                     <div class="col">
-                        <div class="w-50 badge border border-2 rounded-pill border-warning p-4">
+                        <div class="w-75 badge border border-2 rounded-pill border-warning">
                             {{- range .board -}}
                                 <img class="hand" title="{{ .Title }}" src="static/cards/{{ .String }}.svg"/>
                             {{- end -}}
