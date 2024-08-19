@@ -51,7 +51,7 @@
                     <div class="col">
                         <div class="w-50 badge border border-2 rounded-pill border-warning p-4">
                             {{- range .board -}}
-                                <p class="hand p-1" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
+                                <p class="hand p-1" title="{{ .Title }}" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
                             {{- end -}}
                         </div>
                     </div>
@@ -60,14 +60,14 @@
                     <div class="col">
                         <button id="hand1submit" class="btn border border-2 border-light">
                             {{- range .hand1.cards -}}
-                                <p class="hand" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
+                                <p class="hand" title="{{ .Title }}" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
                             {{- end -}}
                         </button>
                     </div>
                     <div class="col">
                         <button id="hand2submit" class="btn border border-2 border-light">
                             {{- range .hand2.cards -}}
-                                <p class="hand" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
+                                <p class="hand" title="{{ .Title }}" style="color: {{ .Color }}">{{ .UnicodeString }}</p>
                             {{- end -}}
                         </button>
                     </div>

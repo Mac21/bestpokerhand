@@ -266,6 +266,12 @@ func (c Card) String() string {
 	return string(c.face) + string(c.suit)
 }
 
+// Title returns a string of "card face fullname of card suit" to be used in an HTML tags title attribute.
+// E.g. Ace of Spades, Ten of Diamonds
+func (c Card) Title() string {
+    return c.faceName() + " of " + c.suitName()
+}
+
 func (c Card) Color() string {
 	switch c.suit {
 	case 'c':
@@ -274,8 +280,58 @@ func (c Card) Color() string {
 		return "blue"
 	case 'h':
 		return "red"
-	default:
+	case 's':
 		return "black"
+	default:
+		return "purple"
+	}
+}
+
+func (c Card) suitName() string {
+	switch c.suit {
+	case 'c':
+		return "Clubs"
+	case 's':
+		return "Spades"
+	case 'd':
+		return "Diamonds"
+	case 'h':
+		return "Hearts"
+    default:
+        return "Invalid"
+	}
+}
+
+func (c Card) faceName() string {
+	switch c.face {
+	case 'a':
+		return "Ace"
+	case 'k':
+		return "King"
+	case 'q':
+		return "Queen"
+	case 'j':
+		return "Jack"
+	case 't':
+		return "Ten"
+	case '9':
+		return "Nine"
+	case '8':
+		return "Eight"
+	case '7':
+		return "Seven"
+	case '6':
+		return "Six"
+	case '5':
+		return "Five"
+	case '4':
+		return "Four"
+	case '3':
+		return "Three"
+	case '2':
+		return "Two"
+	default:
+		return "Invalid"
 	}
 }
 
