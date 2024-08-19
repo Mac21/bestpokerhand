@@ -5,36 +5,11 @@ import (
 	"crypto/rand"
 	"math/big"
 	"slices"
-	"strings"
 )
 
 const (
 	faces = "23456789tjqka"
 	suits = "shdc"
-)
-
-var (
-	suitToUnicode = map[byte]rune{
-		's': 0x1F0A0,
-		'h': 0x1F0B0,
-		'd': 0x1F0C0,
-		'c': 0x1F0D0,
-	}
-	faceToUnicode = map[byte]rune{
-		'a': 0x00001,
-		'2': 0x00002,
-		'3': 0x00003,
-		'4': 0x00004,
-		'5': 0x00005,
-		'6': 0x00006,
-		'7': 0x00007,
-		'8': 0x00008,
-		'9': 0x00009,
-		't': 0x0000A,
-		'j': 0x0000B,
-		'q': 0x0000D,
-		'k': 0x0000E,
-	}
 )
 
 type Deck []*Card
@@ -73,14 +48,6 @@ func (d Deck) String() string {
 		s += c.String()
 	}
 	return s
-}
-
-func (d Deck) UnicodeString() string {
-	var b strings.Builder
-	for _, c := range d {
-		b.WriteString(c.UnicodeString())
-	}
-	return b.String()
 }
 
 func (d Deck) Len() int {
@@ -242,7 +209,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 	case !hasTrips.Empty():
 		return 4000 + hasTrips[hasTrips.Len()-1].Score() + handScore
 	case !hasPair.Empty():
-		// Two pair or pair
+		// Two pair or pair + board pair
 		if hasPair.Len() > 1 {
 			return 3000 + 7*hasPair[hasPair.Len()-2].Score() + 14*hasPair[hasPair.Len()-1].Score() + handScore
 		}
@@ -258,10 +225,6 @@ type Card struct {
 	priority int
 }
 
-func (c Card) UnicodeString() string {
-	return string(suitToUnicode[c.suit] + faceToUnicode[c.face])
-}
-
 func (c Card) String() string {
 	return string(c.face) + string(c.suit)
 }
@@ -270,21 +233,6 @@ func (c Card) String() string {
 // E.g. Ace of Spades, Ten of Diamonds
 func (c Card) Title() string {
     return c.faceName() + " of " + c.suitName()
-}
-
-func (c Card) Color() string {
-	switch c.suit {
-	case 'c':
-		return "yellowgreen"
-	case 'd':
-		return "blue"
-	case 'h':
-		return "red"
-	case 's':
-		return "black"
-	default:
-		return "purple"
-	}
 }
 
 func (c Card) suitName() string {
