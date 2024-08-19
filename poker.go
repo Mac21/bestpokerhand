@@ -219,7 +219,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 	cards = append(cards, d...)
 	cards = append(cards, hand...)
 
-	handScore := hand[0].Score() + hand[1].Score() - 28
+	handScore := hand[0].Score() + hand[1].Score()
 	flush, isStraightFlush, flushScore := d.IsFlush(hand)
 	straight, straightScore := d.IsStraight(hand)
 
