@@ -15,9 +15,8 @@ const (
 type Score int
 
 const (
-    _ = iota
-    _ = iota
-    Pair Score = (1000 * iota)
+    Highcard Score = (1000 * iota)
+    Pair 
     TwoPair
     Trips
     Straight
@@ -231,7 +230,7 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 		}
 		return int(Pair) + hasPair[hasPair.Len()-1].Score() + handScore
 	default:
-		return handScore
+		return int(Highcard) + handScore
 	}
 }
 
