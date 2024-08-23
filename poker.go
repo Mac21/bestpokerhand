@@ -12,6 +12,22 @@ const (
 	suits = "shdc"
 )
 
+type Score int
+
+const (
+    _ = iota
+    _ = iota
+    Pair Score = (1000 * iota)
+    TwoPair
+    Trips
+    Straight
+    Flush
+    FullHouse
+    Quads
+    StraightFlush 
+    RoyalFlush
+)
+
 type Deck []*Card
 
 func NewDeck() *Deck {
@@ -197,23 +213,23 @@ func (d Deck) AnalyzeHand(hand Deck) int {
 
 	switch {
 	case isStraightFlush:
-		return 9000 + handScore
+		return int(StraightFlush) + handScore
 	case !hasQuads.Empty():
-		return 8000 + hasQuads[hasQuads.Len()-1].Score()
+		return int(Quads) + hasQuads[hasQuads.Len()-1].Score()
 	case !hasTrips.Empty() && !hasPair.Empty():
-		return 7000 + hasTrips[hasTrips.Len()-1].Score()
+		return int(FullHouse) + hasTrips[hasTrips.Len()-1].Score()
 	case flush:
-		return 6000 + flushScore
+		return int(Flush) + flushScore
 	case straight:
-		return 5000 + straightScore
+		return int(Straight) + straightScore
 	case !hasTrips.Empty():
-		return 4000 + hasTrips[hasTrips.Len()-1].Score() + handScore
+		return int(Trips) + hasTrips[hasTrips.Len()-1].Score() + handScore
 	case !hasPair.Empty():
 		// Two pair or pair + board pair
 		if hasPair.Len() > 1 {
-			return 3000 + 7*hasPair[hasPair.Len()-2].Score() + 14*hasPair[hasPair.Len()-1].Score() + handScore
+			return int(TwoPair) + 7*hasPair[hasPair.Len()-2].Score() + 14*hasPair[hasPair.Len()-1].Score() + handScore
 		}
-		return 2000 + hasPair[hasPair.Len()-1].Score() + handScore
+		return int(Pair) + hasPair[hasPair.Len()-1].Score() + handScore
 	default:
 		return handScore
 	}
