@@ -3,24 +3,23 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func indexTemplateHandler(c *gin.Context) {
 	session := getSession(c)
-    overallScore, hasOverallScore := session.Get("overallScore").(int)
-    if !hasOverallScore {
-        session.Set("overallScore", 0)
-        overallScore = 0
-    }
+	overallScore, hasOverallScore := session.Get("overallScore").(int)
+	if !hasOverallScore {
+		session.Set("overallScore", 0)
+		overallScore = 0
+	}
 
-    numHands, hasNumHands := session.Get("numHands").(int)
-    if !hasNumHands {
-        session.Set("numHands", 0)
-        numHands = 0
-    }
+	numHands, hasNumHands := session.Get("numHands").(int)
+	if !hasNumHands {
+		session.Set("numHands", 0)
+		numHands = 0
+	}
 	session.Save()
 
 	deck := NewDeck()
@@ -32,14 +31,8 @@ func indexTemplateHandler(c *gin.Context) {
 		"overallScore": overallScore,
 		"numHands":     numHands,
 		"board":        board,
-		"hand1": gin.H{
-			"cards": hand1,
-			"score": board.AnalyzeHand(hand1),
-		},
-		"hand2": gin.H{
-			"cards": hand2,
-			"score": board.AnalyzeHand(hand2),
-		},
+		"hand1":        hand1,
+		"hand2":        hand2,
 	})
 }
 
@@ -48,35 +41,36 @@ func newGameHandler(c *gin.Context) {
 	session.Set("overallScore", 0)
 	session.Set("numHands", 0)
 	session.Save()
-    c.Redirect(http.StatusFound, "/")
+	c.Redirect(http.StatusFound, "/")
 }
 
 func runningGameHandler(c *gin.Context) {
 	session := getSession(c)
 	overallScore := session.Get("overallScore").(int)
 	numHands := session.Get("numHands").(int)
-	boardstr, _ := c.GetPostForm("board")
+	bs, _ := c.GetPostForm("board")
 	pickedScore, _ := c.GetPostForm("chosenscore")
-	hand1scorestr, _ := c.GetPostForm("hand1score")
-	hand2scorestr, _ := c.GetPostForm("hand2score")
-	hand1str, _ := c.GetPostForm("hand1")
-	hand2str, _ := c.GetPostForm("hand2")
+	h1s, _ := c.GetPostForm("hand1")
+	h2s, _ := c.GetPostForm("hand2")
 
-	hand1score, _ := strconv.Atoi(hand1scorestr)
-	hand2score, _ := strconv.Atoi(hand2scorestr)
+	board := NewDeckFromString(bs)
+	h1 := NewDeckFromString(h1s)
+	h2 := NewDeckFromString(h2s)
+	hand1Score := board.AnalyzeHand(*h1)
+	hand2Score := board.AnalyzeHand(*h2)
 
-	fmt.Printf("Board: %s\n", boardstr)
-	fmt.Printf("\tHand1: %s\n", hand1str)
-	fmt.Printf("\tHand2: %s\n", hand2str)
-	fmt.Printf("\tpicked score: %s, hand1score: %d, hand2score: %d, overallscore: %d\n", pickedScore, hand1score, hand2score, overallScore)
+	fmt.Printf("Board: %s\n", board)
+	fmt.Printf("\tHand1: %s\n", h1s)
+	fmt.Printf("\tHand2: %s\n", h2s)
+	fmt.Printf("\tpicked score: %s, hand1Score: %d, hand2Score: %d, overallscore: %d\n", pickedScore, hand1Score, hand2Score, overallScore)
 
 	switch pickedScore {
 	case "hand1":
-		if hand1score >= hand2score {
+		if hand1Score >= hand2Score {
 			overallScore++
 		}
 	case "hand2":
-		if hand2score >= hand1score {
+		if hand2Score >= hand1Score {
 			overallScore++
 		}
 	}
@@ -84,5 +78,5 @@ func runningGameHandler(c *gin.Context) {
 	session.Set("numHands", numHands)
 	session.Set("overallScore", overallScore)
 	session.Save()
-    c.Redirect(http.StatusFound, "/")
+	c.Redirect(http.StatusFound, "/")
 }
