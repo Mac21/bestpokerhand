@@ -7,6 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TODO(rtt): Remove redirects and instead have fetch calls handle all of the front end logic.
+// TODO(rtt): Add default timer of 30 seconds and end the game if a hand is missed or the 30 seconds is over.
 func indexTemplateHandler(c *gin.Context) {
 	session := getSession(c)
 	overallScore, hasOverallScore := session.Get("overallScore").(int)
