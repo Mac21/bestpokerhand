@@ -22,11 +22,11 @@
                     <h4 class="site-title">Best Poker Hand</h4>
                     <h6 class="site-title">
                         <span class="badge bg-primary rounded-circle"
-                           tabindex="0"
-                           data-bs-toggle="popover"
-                           data-bs-placement="right"
-                           data-bs-title="How to play"
-                           data-bs-content="Click one of two hands that make the best 5 card <a target=_blank href=https://en.wikipedia.org/wiki/Texas_hold_'em#Hand_values>hand</a>.">?</span>
+                              tabindex="0"
+                              data-bs-toggle="popover"
+                              data-bs-placement="right"
+                              data-bs-title="How to play"
+                              data-bs-content="Click one of two hands that make the best 5 card <a target=_blank href=https://en.wikipedia.org/wiki/Texas_hold_'em#Hand_values>hand</a>.">?</span>
                     </h6>
                 </div>
                 <div class="col text-center">
@@ -43,10 +43,8 @@
             <form action="/score" method="post">
                 <input type="text" id="chosenscore" name="chosenscore" hidden value="none">
                 <input type="text" id="board" name="board" hidden value="{{ .board }}">
-                <input type="text" id="hand1" name="hand1" hidden value="{{ .hand1.cards }}">
-                <input type="text" id="hand2" name="hand2" hidden value="{{ .hand2.cards }}">
-                <input type="number" id="hand1score" name="hand1score" hidden value="{{ .hand1.score }}">
-                <input type="number" id="hand2score" name="hand2score" hidden value="{{ .hand2.score }}">
+                <input type="text" id="hand1" name="hand1" hidden value="{{ .hand1 }}">
+                <input type="text" id="hand2" name="hand2" hidden value="{{ .hand2 }}">
                 <div class="row pb-4">
                     <div class="col">
                         <div class="w-75 badge border border-2 rounded-pill border-warning">
@@ -59,14 +57,14 @@
                 <div class="row">
                     <div class="col">
                         <button id="hand1submit" class="btn border border-2 border-light">
-                            {{- range .hand1.cards -}}
+                            {{- range .hand1 -}}
                                 <img class="hand" title="{{ .Title }}" src="static/cards/{{ .String }}.svg"/>
                             {{- end -}}
                         </button>
                     </div>
                     <div class="col">
                         <button id="hand2submit" class="btn border border-2 border-light">
-                            {{- range .hand2.cards -}}
+                            {{- range .hand2 -}}
                                 <img class="hand" title="{{ .Title }}" src="static/cards/{{ .String }}.svg"/>
                             {{- end -}}
                         </button>
